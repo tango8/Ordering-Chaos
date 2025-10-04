@@ -8,35 +8,28 @@ var is_attacking: bool = false
 var attack_duration: float = 0.2
 var attack_timer: float = 0.0
 
-func _ready():
-    $Sprite2D.texture = load("res://art/player_0001.png")
-    
-    if $CollisionShape2D.shape == null:
-        var rect = RectangleShape2D.new()
-        rect.size = Vector2(50,100)
-        $CollisionShape2D.shape = rect
-    $Sprite2D.scale = Vector2(30, 30)
-    print("Player ready!")
+func _ready():	
+	print("Player ready!")
 
 func _physics_process(delta: float) -> void:
-    if not is_on_floor():
-        velocity.y += gravity * delta
+	if not is_on_floor():
+		velocity.y += gravity * delta
 
-    var input_dir = Input.get_axis("ui_left","ui_right")
-    velocity.x = input_dir * move_speed
+	var input_dir = Input.get_axis("ui_left","ui_right")
+	velocity.x = input_dir * move_speed
 
-    if Input.is_action_just_pressed("ui_up") and is_on_floor():
-        velocity.y = jump_force
-        print("up pressed")
+	if Input.is_action_just_pressed("ui_up") and is_on_floor():
+		velocity.y = jump_force
+		print("up pressed")
 
-    if Input.is_action_just_pressed("attack") and not is_attacking:
-        is_attacking = true
-        attack_timer = attack_duration
-        print("Attack!")
+	if Input.is_action_just_pressed("attack") and not is_attacking:
+		is_attacking = true
+		attack_timer = attack_duration
+		print("Attack!")
 
-    if is_attacking:
-        attack_timer -= delta
-        if attack_timer <= 0:
-            is_attacking = false
+	if is_attacking:
+		attack_timer -= delta
+		if attack_timer <= 0:
+			is_attacking = false
 
-    move_and_slide()
+	move_and_slide()
