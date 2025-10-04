@@ -7,9 +7,9 @@
 
 [node name="Stage" parent="." instance=ExtResource("2_sugp2")]
 z_index = 0
-position = Vector2(1000, -50)
+position = Vector2(639, -483)
 
 [node name="Player" parent="." instance=ExtResource("1_0wfyh")]
 z_index = 1
-position = Vector2(300, 0)
-scale = Vector2(4, 4)
+position = Vector2(105, 276)
+scale = Vector2(3, 3)
