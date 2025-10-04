@@ -1,20 +1,6 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=1 format=3]
 
-[ext_resource path="res://scenes/Stage.tscn" type="PackedScene" id=3]
-[ext_resource type="PackedScene" path="res://code/scenes/Player.tscn" id="1"]
-[ext_resource type="Script" uid="uid://5lvx6iok4jiu" path="res://code/scripts/main.gd" id="2"]
+[ext_resource path="res://scripts/main.gd" type="Script" id=1]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("2")
-
-[node name="Player" parent="." instance=ExtResource("1")]
-position = Vector2(-200, 0)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-current = true
-position = Vector2(0, -100)
-
-[node name="Stage" parent="." instance=ExtResource("3")]
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Stage"]
-shape = null   # <- set a RectangleShape2D in editor, make it wide enough to walk on
-position = Vector2(0, 100)
+script = ExtResource("1")

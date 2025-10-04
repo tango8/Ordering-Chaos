@@ -9,32 +9,30 @@ var attack_duration: float = 0.2
 var attack_timer: float = 0.0
 
 func _ready():
-  print("Player is ready!")
-  $Sprite2D.modulate = Color(1, 0, 0)  # tint the sprite
+	if $CollisionShape2D.shape == null:
+		var rect = RectangleShape2D.new()
+		rect.size = Vector2(50,100)
+		$CollisionShape2D.shape = rect
+	print("Player ready!")
 
 func _physics_process(delta: float) -> void:
-  # === Gravity ===
-  if not is_on_floor():
-	velocity.y += gravity * delta
+	if not is_on_floor():
+		velocity.y += gravity * delta
 
-  # === Horizontal movement ===
-  var input_dir = Input.get_axis("ui_left", "ui_right")
-  velocity.x = input_dir * move_speed
+	var input_dir = Input.get_axis("ui_left","ui_right")
+	velocity.x = input_dir * move_speed
 
-  # === Jump ===
-  if Input.is_action_just_pressed("ui_up") and is_on_floor():
-	velocity.y = jump_force
+	if Input.is_action_just_pressed("ui_up") and is_on_floor():
+		velocity.y = jump_force
 
-  # === Attack ===
-  if Input.is_action_just_pressed("attack") and not is_attacking:
-	is_attacking = true
-	attack_timer = attack_duration
-	print("Attack!")
+	if Input.is_action_just_pressed("attack") and not is_attacking:
+		is_attacking = true
+		attack_timer = attack_duration
+		print("Attack!")
 
-  if is_attacking:
-	attack_timer -= delta
-	if attack_timer <= 0.0:
-	  is_attacking = false
+	if is_attacking:
+		attack_timer -= delta
+		if attack_timer <= 0:
+			is_attacking = false
 
-  # === Apply motion ===
-  move_and_slide()
+	move_and_slide()
