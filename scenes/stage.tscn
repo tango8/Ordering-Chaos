@@ -6,16 +6,14 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6c5u0"]
 size = Vector2(1500, 75)
 
-[node name="600" type="StaticBody2D"]
+[node name="Stage" type="StaticBody2D"]
 z_index = 1
 script = ExtResource("1_gi7kc")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, 1000)
-scale = Vector2(2, 0.25)
+scale = Vector2(1.5, 0.5)
 texture = ExtResource("2_kewym")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1000)
-scale = Vector2(2, 0.25)
+scale = Vector2(1, 0.25)
 shape = SubResource("RectangleShape2D_6c5u0")

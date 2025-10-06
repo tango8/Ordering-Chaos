@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ca4gbkdc74h8h" path="res://art/player_0001.png" id="2_g2els"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(50, 100)
+size = Vector2(17, 54)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(1000, 0)
@@ -16,4 +16,5 @@ texture = ExtResource("2_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 modulate = Color(1, 0, 0, 1)
+position = Vector2(-1.5, -1)
 shape = SubResource("RectangleShape2D_g2els")

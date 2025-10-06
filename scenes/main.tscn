@@ -1,15 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3e1cs71k6pnd"]
+[gd_scene load_steps=8 format=3 uid="uid://c3e1cs71k6pnd"]
 
 [ext_resource type="PackedScene" uid="uid://cevrhcabrhhqc" path="res://scenes/player.tscn" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://or5xfeydachc" path="res://scenes/stage.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://b78ia2dlrd34f" path="res://scenes/enemy.tscn" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://b212tq3d4aq2f" path="res://scripts/enemy.gd" id="4_jyhfs"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_jyhfs"]
+b = Vector2(5, 90)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_tbgi4"]
+b = Vector2(0, 90)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_tefeu"]
+b = Vector2(1500, 10)
 
 [node name="Main" type="Node2D"]
 
 [node name="Stage" parent="." instance=ExtResource("2_sugp2")]
 z_index = 0
-position = Vector2(639, -483)
+position = Vector2(575, 500)
+scale = Vector2(0.77, 0.77)
+
+[node name="Left_Wall" type="CollisionShape2D" parent="Stage"]
+position = Vector2(-750, -650)
+scale = Vector2(1, 10)
+shape = SubResource("SegmentShape2D_jyhfs")
+
+[node name="Right_Wall" type="CollisionShape2D" parent="Stage"]
+position = Vector2(750, -650)
+scale = Vector2(1, 10)
+shape = SubResource("SegmentShape2D_tbgi4")
+
+[node name="Ceiling" type="CollisionShape2D" parent="Stage"]
+position = Vector2(-750, -650)
+shape = SubResource("SegmentShape2D_tefeu")
 
 [node name="Player" parent="." instance=ExtResource("1_0wfyh")]
-z_index = 1
-position = Vector2(105, 276)
+position = Vector2(100, 350)
 scale = Vector2(3, 3)
+
+[node name="Enemy" parent="." instance=ExtResource("3_sugp2")]
+position = Vector2(1000, 300)
+scale = Vector2(5, 5)
+script = ExtResource("4_jyhfs")

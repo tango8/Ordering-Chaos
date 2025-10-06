@@ -4,48 +4,57 @@ extends CharacterBody2D
 @export var gravity: float = 1200.0
 @export var patrol_distance: float = 200.0
 @export var attack_cooldown: float = 2.0
+@export var edge_pause_time: float = 0.5  # Pause at edges before turning
 
 var start_position: Vector2
 var direction: int = 1
-var distance_traveled: float = 0.0
 var is_attacking: bool = false
 var attack_timer: float = 0.0
-
-enum AttackType { CHEESE, SHURIKEN, PUNCH, CRUST_WALL }
+var pause_timer: float = 0.0
 
 func _ready():
 	start_position = global_position
-	#$Sprite2D.texture = load("res://images/player.png")
-	$Sprite2D.modulate = Color(1, 1, 0)  # Yellow placeholder for boss
 
 func _physics_process(delta: float) -> void:
 	# Gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
+	else:
+		velocity.y = 0  # reset vertical velocity when on floor
 
 	if is_attacking:
 		attack_timer -= delta
 		if attack_timer <= 0:
 			is_attacking = false
 	else:
-		# Patrol
-		velocity.x = move_speed * direction
-		distance_traveled += move_speed * delta * direction
+		if pause_timer > 0:
+			# Pause at edge
+			pause_timer -= delta
+			velocity.x = 0
+		else:
+			# Patrol movement
+			velocity.x = move_speed * direction
 
-		if abs(global_position.x - start_position.x) >= patrol_distance:
-			direction *= -1
+			var dist_from_start = global_position.x - start_position.x
 
-		# Decide to attack
-		if randi() % 100 < 1:  # ~1% chance per frame to start attack
+			if abs(dist_from_start) >= patrol_distance:
+				velocity.x = 0 # stop first to prevent backwards slip
+				pause_timer = edge_pause_time
+				direction *= -1
+			
+				# Optional: flip sprite or trigger turn animation here
+				# e.g., $Sprite.flip_h = direction < 0
+
+		# Decide to attack randomly (if not paused)
+		if pause_timer <= 0 and randi() % 100 < 1:  # ~1% chance per frame
 			start_attack()
 
-	# Apply motion
 	move_and_slide()
 
 func start_attack():
 	is_attacking = true
 	attack_timer = attack_cooldown
-	var attack_choice = int(randi() % 4)  # 0..3
+	var attack_choice = int(randi() % 4)
 	match attack_choice:
 		0:
 			cheese_attack()
