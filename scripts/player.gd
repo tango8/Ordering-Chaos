@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-@export var move_speed: float = 200.0
-@export var jump_force: float = -500.0
-@export var gravity: float = 1200.0
+@export var move_speed: float = 125.0
+@export var jump_force: float = -375.0
+@export var gravity: float = 1100.0
 
 var is_attacking: bool = false
 var attack_duration: float = 0.2
@@ -21,6 +21,10 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_up") and is_on_floor():
 		velocity.y = jump_force
 		print("up pressed")
+	
+	if Input.is_action_just_pressed("ui_down") and !is_on_floor():
+		velocity.y = -jump_force / 1.5
+		print("down pressed")
 
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		is_attacking = true
