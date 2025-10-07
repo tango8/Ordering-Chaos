@@ -2,54 +2,65 @@ extends CharacterBody2D
 
 @export var move_speed: float = 100.0
 @export var gravity: float = 1200.0
-@export var patrol_distance: float = 200.0
+@export var patrol_distance: float = 100.0
 @export var attack_cooldown: float = 2.0
-@export var edge_pause_time: float = 0.5  # Pause at edges before turning
+@export var jump_force: float = 300.0
 
 var start_position: Vector2
 var direction: int = 1
 var is_attacking: bool = false
 var attack_timer: float = 0.0
-var pause_timer: float = 0.0
 
 func _ready():
 	start_position = global_position
 
 func _physics_process(delta: float) -> void:
-	# Gravity
+	apply_gravity(delta)
+	handle_attack_timer(delta)
+	rand_jump()
+
+	if is_attacking:
+		velocity.x = 0
+		move_and_slide()
+		return
+
+	handle_patrol()
+	rand_attack()
+
+	move_and_slide()
+
+func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	else:
-		velocity.y = 0  # reset vertical velocity when on floor
+		velocity.y = 0
 
+func handle_attack_timer(delta: float) -> void:
 	if is_attacking:
 		attack_timer -= delta
 		if attack_timer <= 0:
 			is_attacking = false
-	else:
-		if pause_timer > 0:
-			# Pause at edge
-			pause_timer -= delta
-			velocity.x = 0
-		else:
-			# Patrol movement
-			velocity.x = move_speed * direction
 
-			var dist_from_start = global_position.x - start_position.x
+func handle_patrol() -> void:
+	# Flip direction if hitting wall
+	if is_on_wall():
+		direction *= -1
 
-			if abs(dist_from_start) >= patrol_distance:
-				velocity.x = 0 # stop first to prevent backwards slip
-				pause_timer = edge_pause_time
-				direction *= -1
-			
-				# Optional: flip sprite or trigger turn animation here
-				# e.g., $Sprite.flip_h = direction < 0
+	# Calculate patrol distance and flip direction if needed
+	var dist_from_start = global_position.x - start_position.x
+	if abs(dist_from_start) >= patrol_distance:
+		direction *= -1
 
-		# Decide to attack randomly (if not paused)
-		if pause_timer <= 0 and randi() % 100 < 1:  # ~1% chance per frame
-			start_attack()
+	velocity.x = move_speed * direction
 
-	move_and_slide()
+func rand_attack() -> void:
+	# 1% chance per frame
+	if randf() < 0.01:
+		start_attack()
+
+func rand_jump() -> void:
+	if is_on_floor() and randf() < 0.01:  # 1% chance per frame
+		velocity.y = -jump_force
 
 func start_attack():
 	is_attacking = true

@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = jump_force
 		print("up pressed")
 	
-	if Input.is_action_just_pressed("ui_down") and !is_on_floor():
+	if Input.is_action_just_pressed("ui_down") and not is_on_floor():
 		velocity.y = -jump_force / 1.5
 		print("down pressed")
 
